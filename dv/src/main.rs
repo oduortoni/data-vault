@@ -4,14 +4,16 @@ use dv::libraries::server::server::{Server, start_server};
 use dv::web::handlers::login::{login_view, login_handler};
 use dv::web::handlers::signup::{signup_view, signup_handler};
 use dv::web::handlers::index::index;
+use dv::libraries::db::sqlite::sqlite_init as dbinit;
 
 #[tokio::main]
-async fn main() {
+async fn main()  -> Result<(), Box<dyn std::error::Error>> {
     dotenvy::dotenv().ok();
+    dbinit().await?;
 
     let config = ServerConfig::new("10000");
     let mut server = Server::new();
-    
+
     server.get("/", index);
     server.get("/login", login_view);
     server.post("/login", login_handler);
@@ -22,4 +24,6 @@ async fn main() {
         eprintln!("Server error: {}", e);
         std::process::exit(1);
     }
+
+    Ok(())
 }

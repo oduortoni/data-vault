@@ -9,6 +9,30 @@ cd data-vault/dv
 cargo run
 ```
 
+install sqlx-cli if you have not:
+
+```bash
+cargo install sqlx-cli --no-default-features --features sqlite
+```
+
+ensure your .env file is present with:
+
+```plaintext
+DATABASE_URL=sqlite://./data.sqlite
+```
+
+then initialize the migration directory if you haven't:
+
+```bash
+sqlx migrate add create_users_table
+```
+
+run the database migrations
+
+```bash
+sqlx migrate run
+```
+
 the open your browser and navigate to the url
 
 ```plaintext

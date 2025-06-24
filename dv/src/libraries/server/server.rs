@@ -5,12 +5,14 @@ use super::config::ServerConfig;
 
 #[derive(Debug, Clone)]
 pub struct Server {
+    pub router: Router,
     pub routes: Vec<(String, String, MethodRouter)>,
 }
 
 impl Server {
     pub fn new() -> Self {
         Self {
+            router: Router::new(),
             routes: Vec::new(),
         }
     }
@@ -59,18 +61,22 @@ impl Server {
     }
 }
 
-pub fn create_app(server: &Server) -> Router {
-    let mut router = Router::new();
 
+pub fn create_app(server: &Server) -> Router {
+    // begin with the server's router which is embellished with the database issues
+    let mut router = server.router.clone();
+    
+    // add all routes from the server
     for (path, _method, route) in &server.routes {
         router = router.route(path, route.clone());
     }
-
+    
     router
 }
 
 pub async fn start_server(config: ServerConfig, server: &Server) -> Result<(), Box<dyn std::error::Error>> {
     let addr = config.get_address();
+
     let app = create_app(&server)
         .nest_service("/static", ServeDir::new("./static"));
 
