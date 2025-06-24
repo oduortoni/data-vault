@@ -135,6 +135,7 @@ dependencies = [
  "axum",
  "dotenvy",
  "tokio",
+ "tower",
  "tower-http",
 ]
 

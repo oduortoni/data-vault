@@ -1,33 +1,31 @@
 // main.rs
-use axum::{routing::get, Router};
-use std::{env, net::SocketAddr};
-use tower_http::services::ServeDir;
-use tokio::net::TcpListener;
+use dv::libraries::server::config::{ServerConfig};
+use dv::libraries::server::server::{Server, start_server};
+use axum::response::Html;
 
 #[tokio::main]
 async fn main() {
-    // Load env vars from .env if present (for development)
     dotenvy::dotenv().ok();
-    
-    // Read port from env or default to 10000
-    let port = env::var("PORT")
-        .unwrap_or_else(|_| "10000".into())
-        .parse::<u16>()
-        .unwrap();
-    
-    let addr = SocketAddr::from(([0, 0, 0, 0], port));
-    
-    // Build routes
-    let app = Router::new()
-        .route("/", get(root_handler))
-        .nest_service("/static", ServeDir::new("./static"));
-    
-    println!("🚀 Vaultform server running at http://{}/", addr);
-    
-    let listener = TcpListener::bind(&addr).await.unwrap();
-    axum::serve(listener, app).await.unwrap();
+
+    let config = ServerConfig::new("10000");
+    let mut server = Server::new();
+    server.get("/", index);
+
+    if let Err(e) = start_server(config, &server).await {
+        eprintln!("Server error: {}", e);
+        std::process::exit(1);
+    }
 }
 
-async fn root_handler() -> &'static str {
-    "Vaultform backend is running."
+async fn index() -> Html<&'static str> {
+    Html(r#"<!DOCTYPE html>
+    <html>
+        <head>
+            <title>Data Vault</title>
+        </head>
+        <body>
+            <h1>Welcome to Data Vault</h1>
+            <p>This is the root page of the Data Vault server.</p>
+        </body>
+    </html>"#)
 }
