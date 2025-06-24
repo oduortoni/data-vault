@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Data Vault | Signup</title>
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <script src="/static/js/script.js"></script>
+    </head>
+    <body>
+        <h1>Data Vault</h1>
+        <form action="/signup" method="POST">
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Signup</button>
+        </form>
+        <div class="alternative">
+            <p>
+                Already have an account, login instead
+            </p>
+            <a href="/login">Log in</a>
+        </div>
+    </body>
+</html>
