@@ -1,23 +1,10 @@
 use axum::response::Html;
+use std::fs;
 
-pub async fn index() -> Html<&'static str> {
-    Html(r#"<!DOCTYPE html>
-    <html>
-        <head>
-            <title>Data Vault</title>
-            <link rel="stylesheet" href="/static/css/styles.css">
-            <script src="/static/js/script.js"></script>
-        </head>
-        <body>
-            <h1>Welcome to Data Vault</h1>
-            <p>This is the root page of the Data Vault server.</p>
-            <form action="/login" method="post">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-                <button type="submit">Login</button>
-            </form>
-        </body>
-    </html>"#)
+pub async fn index() -> Html<String> {
+    let content = fs::read_to_string("templates/index.html")
+        .unwrap_or_else(|_| {
+            "<h1>500 Internal Server Error</h1><p>Template not found</p>".to_string()
+        });
+    Html(content)
 }
