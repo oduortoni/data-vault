@@ -49,3 +49,6 @@ go-dv/vendor/
 # OS-generated files
 .DS_Store
 Thumbs.db
+
+# error handling
+errors.log
