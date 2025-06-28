@@ -28,10 +28,10 @@ GO_BINARY = $(GO_DIR)/main
 GO_BINARY = main
 
 build-go:
-	cd $(GO_DIR) && go build -o $(GO_BINARY) $(GO_MAIN)
+	@cd $(GO_DIR) && go build -o $(GO_BINARY) $(GO_MAIN)
 
 run-go: build-go
-	./$(GO_DIR)/$(GO_BINARY)
+	@./$(GO_DIR)/$(GO_BINARY)
 
 clean-go:
 	rm -f $(GO_DIR)/$(GO_BINARY)
