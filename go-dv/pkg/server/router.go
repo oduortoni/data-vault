@@ -32,12 +32,12 @@ func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 // pathMatch checks for exact or prefix matches
 func pathMatch(pattern, path string) bool {
-	// Exact match
+	// exact match
 	if pattern == path {
 		return true
 	}
 
-	// Prefix match for paths like "/static/"
+	// prefix match for paths like "/static/"
 	if len(pattern) > 1 && pattern[len(pattern)-1] == '/' && len(path) >= len(pattern) && path[:len(pattern)] == pattern {
 		return true
 	}

@@ -22,10 +22,10 @@ func main() {
 	Port = server.Port(Port)
 	fmt.Printf("Server listening on %s:%d\n", Host, Port)
 
+	// fetch all neded directories
 	cwd, err := os.Getwd()
 	viewsDir := path.Join(cwd, "go-dv/mvc/views")
 	staticDir := path.Join(cwd, "go-dv/www/static/")
-	fmt.Println("Static at", staticDir)
 
 	hTemplate, err := htemplate.NewHTemplate(viewsDir, "*.html")
 	if err != nil {
