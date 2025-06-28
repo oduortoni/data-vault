@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-type Server struct {
+type HttpServer struct {
 	Host     string
 	Port     int
 	FileName string
@@ -14,10 +14,10 @@ type Server struct {
 	Router *Router
 }
 
-func Start(host string, port int, filename string) *Server {
+func Start(host string, port int, filename string) *HttpServer {
 	router := NewRouter()
 
-	server := &Server{
+	server := &HttpServer{
 		Host:     host,
 		Port:     port,
 		FileName: filename,
@@ -27,17 +27,17 @@ func Start(host string, port int, filename string) *Server {
 	return server
 }
 
-func (s Server) ListenAndServe() (err error) {
+func (s HttpServer) ListenAndServe() (err error) {
 	addr := fmt.Sprintf("%s:%d", s.Host, s.Port)
 	err = http.ListenAndServe(addr, s.Router)
 	return
 }
 
-func (s Server) Register(pattern string, handler http.HandlerFunc) {
+func (s HttpServer) Register(pattern string, handler http.HandlerFunc) {
 	s.Router.register(pattern, handler)
 }
 
-func (s Server) Info(err error, msg string, save bool) {
+func (s HttpServer) Info(err error, msg string, save bool) {
 	logMsg := fmt.Sprintf("[INFO] %s: %v\n", msg, err)
 	fmt.Print(logMsg)
 
@@ -46,7 +46,7 @@ func (s Server) Info(err error, msg string, save bool) {
 	}
 }
 
-func (s *Server) Panic(err error, msg string, save bool) {
+func (s *HttpServer) Panic(err error, msg string, save bool) {
 	logMsg := fmt.Sprintf("[PANIC] %s: %v\n", msg, err)
 	fmt.Fprint(os.Stderr, logMsg)
 
@@ -57,7 +57,7 @@ func (s *Server) Panic(err error, msg string, save bool) {
 	os.Exit(1)
 }
 
-func (s *Server) appendToFile(logMsg string) {
+func (s *HttpServer) appendToFile(logMsg string) {
 	if s.FileName == "" {
 		return
 	}

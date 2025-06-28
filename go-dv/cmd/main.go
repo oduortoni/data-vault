@@ -15,6 +15,7 @@ var (
 	Port      int    = 9000
 	Host      string = "0.0.0.0"
 	hTemplate *htemplate.HTemplate
+	hSrv *server.HttpServer
 )
 
 func main() {
@@ -29,13 +30,13 @@ func main() {
 		log.Fatalf("Unable to parse template files\n%s\n", err.Error())
 	}
 
-	server := server.Start(Host, Port, "errors.log")
+	hSrv = server.Start(Host, Port, "errors.log")
 
 	// register routes
-	server.Register("/", controllers.Index(hTemplate))
+	hSrv.Register("/", controllers.Index(hTemplate))
 
-	err = server.ListenAndServe()
+	err = hSrv.ListenAndServe()
 	if err != nil {
-		server.Info(err, "could not start server", true)
+		hSrv.Info(err, "could not start server", true)
 	}
 }
