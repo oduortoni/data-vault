@@ -3,15 +3,45 @@
  * description: Renders the login form and handles login submission.
  * author: toni
  * date: 2025-06-28
- * version: 1.0.0
+ * version: 1.1.0
  * license: MIT
  * copyright: 2025 toni
  * contact: oduortoni@gmail.com
  */
 
-const Login = () => {
-    window.app.innerHTML = `
-        <section>
+const Login = async () => {
+    window.app.innerHTML = LoginView();
+
+    const output = document.getElementById("login-output");
+    const form = document.getElementById("login-form");
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const payload = {
+            email: form["login-email"].value,
+            password: form["login-password"].value,
+        };
+
+        try {
+            const res = await fetch("/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify(payload),
+            });
+
+            const data = await res.json();
+            output.innerText = JSON.stringify(data, null, 2);
+        } catch (err) {
+            output.innerText = "Failed to connect to server";
+            console.error(err);
+        }
+    });
+};
+
+const LoginView = () => {
+    return `
+        <section class="auth-form">
             <h2>Login</h2>
             <form id="login-form">
                 <input type="email" id="login-email" placeholder="Email" required />
@@ -21,29 +51,6 @@ const Login = () => {
             <pre id="login-output"></pre>
         </section>
     `;
-
-    const output = document.getElementById("login-output");
-
-    document.getElementById("login-form").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const payload = {
-            email: document.getElementById("login-email").value,
-            password: document.getElementById("login-password").value
-        };
-
-        try {
-            const res = await fetch("/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-                body: JSON.stringify(payload)
-            });
-            const data = await res.json();
-            output.innerText = JSON.stringify(data, null, 2);
-        } catch {
-            output.innerText = "Failed to connect to server";
-        }
-    });
 };
 
 export default Login;
