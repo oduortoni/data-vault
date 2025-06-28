@@ -11,9 +11,47 @@ var (
 )
 
 func main() {
-	addr := fmt.Sprintf("%s:%d", Host, Port)
+	fmt.Printf("Server listening on %s:%d\n", Host, Port)
+	
+	server, err := StartServer(Host, Port, "")
+	if err != nil {
+		server.Info(err, "could not start server", false)
+	}
+}
 
-	fmt.Printf("Server listening on %s\n", addr)
+type Server struct {
+	Host string
+	Port int
+	FileName string
+	Errors []string
+}
 
-	http.ListenAndServe(addr, nil)
+func StartServer(host string, port int, filename string) (*Server, error) {
+	server := &Server{
+		Host: host,
+		Port: port,
+		FileName: filename,
+	}
+
+	err := server.ListenAndServe()
+
+	return server, err
+}
+
+func (s Server) ListenAndServe() (err error) {
+	addr := fmt.Sprintf("%s:%d", s.Host, s.Port)
+	err = http.ListenAndServe(addr, nil)
+	return
+}
+
+func (s Server) Info(err error, msg string, save bool) {
+	if save {
+		//save to log file
+	}
+}
+
+func (s *Server) Panic(err error, msg string, save bool) {
+	if save {
+		// save to file
+	}
 }
