@@ -57,16 +57,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Navbar links
     document.getElementById("nav-logo").onclick = () => router.navigate("/");
     document.getElementById("nav-home").onclick = () => router.navigate("/");
-    document.getElementById("nav-posts").onclick = () =>
-        router.navigate("/posts");
-    document.getElementById("nav-about").onclick = () =>
-        router.navigate("/about");
-    document.getElementById("nav-login").onclick = () =>
-        router.navigate("/login");
-    document.getElementById("nav-register").onclick = () =>
-        router.navigate("/register");
-    document.getElementById("nav-logout").onclick = () =>
-        router.navigate("/logout");
+    document.getElementById("nav-about").onclick = () => router.navigate("/about");
+    document.getElementById("nav-login").onclick = () => router.navigate("/login");
+    document.getElementById("nav-register").onclick = () => router.navigate("/register");
+    document.getElementById("nav-logout").onclick = () => router.navigate("/logout");
 
     // Initial route on page load
     router.navigate(location.pathname);

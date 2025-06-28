@@ -29,7 +29,7 @@ func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 	}
-	http.NotFound(w, req)
+	http.Redirect(w, req, "/", http.StatusFound)
 }
 
 

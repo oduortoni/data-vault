@@ -53,9 +53,9 @@ class Router {
             });
 
             // Pass both app and params to the view
-            route.view(app, params);
+            route.view(params);
         } else {
-            this.#default(app);
+            this.#default();
         }
     }
 
