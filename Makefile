@@ -20,20 +20,21 @@ clean-rust:
 # === Go ===
 
 GO_DIR = go-dv
-GO_MAIN = $(GO_DIR)/cmd/main.go
+GO_MAIN = ./cmd/main.go
 GO_BINARY = $(GO_DIR)/main
 
 .PHONY: build-go run-go clean-go
 
+GO_BINARY = main
+
 build-go:
-	go build -o $(GO_BINARY) $(GO_MAIN)
+	cd $(GO_DIR) && go build -o $(GO_BINARY) $(GO_MAIN)
 
 run-go: build-go
-	./$(GO_BINARY)
+	./$(GO_DIR)/$(GO_BINARY)
 
 clean-go:
-	rm -f $(GO_BINARY)
-
+	rm -f $(GO_DIR)/$(GO_BINARY)
 
 # === Combined Convenience Targets ===
 
