@@ -11,7 +11,7 @@ type HttpServer struct {
 	Port     int
 	FileName string
 	Errors   []string
-	Router *Router
+	Router   *Router
 }
 
 func Start(host string, port int, filename string) *HttpServer {
@@ -21,7 +21,7 @@ func Start(host string, port int, filename string) *HttpServer {
 		Host:     host,
 		Port:     port,
 		FileName: filename,
-		Router: router,
+		Router:   router,
 	}
 
 	return server
@@ -33,9 +33,10 @@ func (s HttpServer) ListenAndServe() (err error) {
 	return
 }
 
-func (s HttpServer) Register(pattern string, handler http.HandlerFunc) {
-	s.Router.register(pattern, handler)
+func (s HttpServer) Register(method, pattern string, handler http.HandlerFunc) {
+	s.Router.register(method, pattern, handler)
 }
+
 
 func (s HttpServer) Info(err error, msg string, save bool) {
 	logMsg := fmt.Sprintf("[INFO] %s: %v\n", msg, err)

@@ -9,7 +9,7 @@ import (
 
 type HTemplate struct {
 	rootDIR string
-	tmpl *template.Template
+	tmpl    *template.Template
 }
 
 func NewHTemplate(rootDir string, pattern string) (*HTemplate, error) {
@@ -19,7 +19,7 @@ func NewHTemplate(rootDir string, pattern string) (*HTemplate, error) {
 	}
 	return &HTemplate{
 		rootDIR: rootDir,
-		tmpl: tmpl,
+		tmpl:    tmpl,
 	}, nil
 }
 

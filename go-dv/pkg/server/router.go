@@ -3,32 +3,35 @@ package server
 import (
 	"net/http"
 )
+type routeKey struct {
+	Method string
+	Path   string
+}
 
 type Router struct {
-	routes map[string]http.HandlerFunc
+	routes map[routeKey]http.HandlerFunc
 }
 
 func NewRouter() *Router {
 	return &Router{
-		routes: make(map[string]http.HandlerFunc),
+		routes: make(map[routeKey]http.HandlerFunc),
 	}
 }
 
-func (r *Router) register(pattern string, handler http.HandlerFunc) {
-	r.routes[pattern] = handler
+func (r *Router) register(method string, pattern string, handler http.HandlerFunc) {
+	r.routes[routeKey{Method: method, Path: pattern}] = handler
 }
-
 // implement the ServeHTTP so the Router satisfies http.Handler
 func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	for pattern, handler := range r.routes {
-		if req.Method == http.MethodGet && pathMatch(pattern, req.URL.Path) {
+	for key, handler := range r.routes {
+		if key.Method == req.Method && pathMatch(key.Path, req.URL.Path) {
 			handler(w, req)
 			return
 		}
 	}
-
 	http.NotFound(w, req)
 }
+
 
 // pathMatch checks for exact or prefix matches
 func pathMatch(pattern, path string) bool {
