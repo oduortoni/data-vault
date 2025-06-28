@@ -20,10 +20,27 @@ func (r *Router) register(pattern string, handler http.HandlerFunc) {
 
 // implement the ServeHTTP so the Router satisfies http.Handler
 func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	if handler, ok := r.routes[req.URL.Path]; ok && req.Method == http.MethodGet {
-		handler(w, req)
-		return
+	for pattern, handler := range r.routes {
+		if req.Method == http.MethodGet && pathMatch(pattern, req.URL.Path) {
+			handler(w, req)
+			return
+		}
 	}
 
 	http.NotFound(w, req)
+}
+
+// pathMatch checks for exact or prefix matches
+func pathMatch(pattern, path string) bool {
+	// Exact match
+	if pattern == path {
+		return true
+	}
+
+	// Prefix match for paths like "/static/"
+	if len(pattern) > 1 && pattern[len(pattern)-1] == '/' && len(path) >= len(pattern) && path[:len(pattern)] == pattern {
+		return true
+	}
+
+	return false
 }

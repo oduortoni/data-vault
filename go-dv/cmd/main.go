@@ -15,17 +15,19 @@ var (
 	Port      int    = 9000
 	Host      string = "0.0.0.0"
 	hTemplate *htemplate.HTemplate
-	hSrv *server.HttpServer
+	hSrv      *server.HttpServer
 )
 
 func main() {
+	Port = server.Port(Port)
 	fmt.Printf("Server listening on %s:%d\n", Host, Port)
 
-	viewsPath, err := os.Getwd()
-	views := path.Join(viewsPath, "go-dv/mvc/views")
-	fmt.Println("Views at: ", views)
+	cwd, err := os.Getwd()
+	viewsDir := path.Join(cwd, "go-dv/mvc/views")
+	staticDir := path.Join(cwd, "go-dv/www/static/")
+	fmt.Println("Static at", staticDir)
 
-	hTemplate, err := htemplate.NewHTemplate(views, "*.html")
+	hTemplate, err := htemplate.NewHTemplate(viewsDir, "*.html")
 	if err != nil {
 		log.Fatalf("Unable to parse template files\n%s\n", err.Error())
 	}
@@ -34,6 +36,7 @@ func main() {
 
 	// register routes
 	hSrv.Register("/", controllers.Index(hTemplate))
+	hSrv.Register("/static/", controllers.Static(staticDir))
 
 	err = hSrv.ListenAndServe()
 	if err != nil {
