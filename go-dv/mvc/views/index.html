@@ -7,12 +7,24 @@
     <link rel="stylesheet" href="/static/css/styles.css" type="text/css" />
 </head>
 <body>
-    <div id="root">
+    <header>
+        <nav>
+            <div class="logo" id="nav-logo">{{.Title}}</div>
+            <ul>
+                <li><a id="nav-home">Home</a></li>
+                <li><a id="nav-about">About</a></li>
+                <li><a id="nav-login">Login</a></li>
+                <li><a id="nav-register">Register</a></li>
+                <li><a id="nav-logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div id="app">
         <h1>{{.Title}}</h1>
         <div>
             {{.Body}}
         </div>
     </div>
-    <script src="/static/js/script.js" type="application/javascript"></script>
+    <script type="module" src="/static/js/script.js"></script>
 </body>
 </html>

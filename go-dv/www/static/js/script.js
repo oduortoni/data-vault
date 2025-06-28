@@ -1,72 +1,73 @@
+/*
+ * file: go-dv/www/static/js/script.js
+ * description: Bootstraps the SPA and sets up client-side routing.
+ * author: toni
+ * date: 2025-06-28
+ * version: 1.1.0
+ * license: MIT
+ * copyright: 2025 toni
+ * contact: oduortoni@gmail.com
+ */
+
+import { Router } from "./lib/index.js";
+import { Dialog } from "./components/index.js";
+import {
+    Home,
+    About,
+    Register,
+    Login,
+    Logout,
+} from "./pages/index.js";
+
 document.addEventListener("DOMContentLoaded", () => {
-    const root = document.getElementById("root");
-    if (!root) return;
-  
-    root.innerHTML = `
-      <h2>Auth SPA</h2>
-      <div id="auth-box">
-        <form id="login-form">
-          <input type="email" id="login-email" placeholder="Email" required />
-          <input type="password" id="login-password" placeholder="Password" required />
-          <button type="submit">Login</button>
-        </form>
-  
-        <form id="register-form">
-          <input type="email" id="register-email" placeholder="Email" required />
-          <input type="password" id="register-password" placeholder="Password" required />
-          <button type="submit">Register</button>
-        </form>
-  
-        <button id="logout-btn">Logout</button>
-      </div>
-  
-      <pre id="response-output"></pre>
-    `;
-  
-    const output = document.getElementById("response-output");
-  
-    const sendJSON = async (url, payload) => {
-        console.log(url, payload)
-      try {
-        const res = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          credentials: "include",
-          body: JSON.stringify(payload)
-        });
-  
-        const data = await res.json();
-        output.innerText = JSON.stringify(data, null, 2);
-      } catch (err) {
-        output.innerText = "Failed to connect to server";
-      }
+    const app = document.getElementById("app");
+
+    // Expose globally for convenience
+    window.app = app;
+    window.views = {
+        Dialog,
+        Home,
+        About,
+        Login,
+        Register,
+        Logout,
     };
-  
-    document.getElementById("login-form").addEventListener("submit", (e) => {
-      e.preventDefault();
-      sendJSON("/auth/login", {
-        email: document.getElementById("login-email").value,
-        password: document.getElementById("login-password").value
-      });
-    });
-  
-    document.getElementById("register-form").addEventListener("submit", (e) => {
-      e.preventDefault();
-      sendJSON("/auth/register", {
-        email: document.getElementById("register-email").value,
-        password: document.getElementById("register-password").value
-      });
-    });
-  
-    document.getElementById("logout-btn").addEventListener("click", async () => {
-      const res = await fetch("/auth/logout", {
-        method: "POST",
-        credentials: "include"
-      });
-      const data = await res.json();
-      output.innerText = JSON.stringify(data, null, 2);
-    });
-  });
-  
+
+    const router = new Router();
+
+    // Core routes
+    router.fallback(Home);
+    router.register("/", Home);
+    router.register("/about", About);
+
+    // Auth routes
+    router.register("/login", Login);
+    router.register("/register", Register);
+    router.register("/logout", Logout);
+
+    window.router = router;
+
+    /**
+     * Handles back/forward navigation
+     */
+    window.onpopstate = () => {
+        router.navigate(location.pathname);
+    };
+
+    // Navbar links
+    document.getElementById("nav-logo").onclick = () => router.navigate("/");
+    document.getElementById("nav-home").onclick = () => router.navigate("/");
+    document.getElementById("nav-posts").onclick = () =>
+        router.navigate("/posts");
+    document.getElementById("nav-about").onclick = () =>
+        router.navigate("/about");
+    document.getElementById("nav-login").onclick = () =>
+        router.navigate("/login");
+    document.getElementById("nav-register").onclick = () =>
+        router.navigate("/register");
+    document.getElementById("nav-logout").onclick = () =>
+        router.navigate("/logout");
+
+    // Initial route on page load
+    router.navigate(location.pathname);
+});
