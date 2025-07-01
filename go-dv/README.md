@@ -33,8 +33,12 @@ This is the Go implementation of the Data Vault application. It is a web server 
     ```
 
 5.  **Run the application**:
+
+You can go back to the root directory and run:
+
     ```bash
-    go run ./cmd/main.go
+    cd ..
+    make run-go
     ```
 
 The server will start, and you can access it at `http://localhost:9000` (or the port you configured).

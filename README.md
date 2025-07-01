@@ -5,52 +5,29 @@ A privacy-first, extensible, pluggable data store system for structured personal
 
 ```bash
 git clone https://github.com/oduortoni/data-vault.git
-cd data-vault/dv
-cargo run
 ```
 
-install sqlx-cli if you have not:
+There are two implementations of the project
+
+1. GO
 
 ```bash
-cargo install sqlx-cli --no-default-features --features sqlite
+cd data-vault/go-dev
 ```
 
-ensure your .env file is present with:
+there is a README.md file that will guide you
 
-```plaintext
-DATABASE_URL=sqlite://./data.sqlite
-```
-
-then initialize the migration directory if you haven't:
+2. Rust
 
 ```bash
-sqlx migrate add create_users_table
+cd data-vault/rust-dev
 ```
 
-run the database migrations
-
-```bash
-sqlx migrate run
-```
-
-the open your browser and navigate to the url
-
-```plaintext
-http://localhost:10000
-```
-
-## port
-
-If you are experience port issues, you can defin ean environment variable called PORT and then restart the project
-
-```bash
-export PORT=10000
-cargo run
-```
+similarly, there is a README.md file that will guide you
 
 ## preview
 
-You can check the live preview of this site at:
+You can check the live preview of the rust site at:
 
 [data-vault](https://data-vault.onrender.com)
 
