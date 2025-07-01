@@ -16,23 +16,29 @@ func NewUserService(i_user UserInterface) *UserService {
 	}
 }
 
-// log in a user is exists
-func (s *UserService) Login(user UserDTO) (bool, error) {
-	if err := user.Validate(); err != nil {
-		return false, err
+// log in a user if they exist
+func (s *UserService) Login(user UserDTO) (*UserDTO, error) {
+	existingUser, found := s.IUser.Exists(user.Email)
+	if !found {
+		return nil, errors.New("user not found")
 	}
 
-	existingUser, err := s.IUser.Read(user.ID)
-	if err != nil {
-		return false, err
+	if existingUser == nil {
+		return nil, errors.New("user data is empty")
+	}
+
+	if existingUser.Status == false {
+		return nil, errors.New("user is inactive")
 	}
 
 	if existingUser.Email == user.Email && existingUser.Status {
-		// Assuming password validation is handled elsewhere, e.g., hashing and comparing
-		return true, nil
+		if match := existingUser.ComparePassword(user.Password); !match {
+			return nil, errors.New("invalid password")
+		}
+		return existingUser, nil
 	}
 
-	return false, errors.New("invalid credentials or user inactive")
+	return nil, errors.New("invalid credentials or user inactive")
 }
 
 // RegisterUser registers a new user

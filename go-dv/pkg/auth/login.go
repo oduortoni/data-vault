@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"dv/internal/users"
 	"dv/pkg/errors"
 )
 
@@ -20,19 +21,22 @@ func (auth *Auth) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, exists := (*auth.UserService).Exists(creds.Email)
-	if !exists {
-		errors.WriteJSONError(w, "user not found", http.StatusNotFound)
-		return
+	userCreds := users.UserDTO{
+		Email:    creds.Email,
+		Password: creds.Password,
 	}
 
-	if user == nil {
-		errors.WriteJSONError(w, "user not found", http.StatusNotFound)
+	user, err := auth.UserService.Login(userCreds)
+	if err != nil {
+		if err.Error() == "invalid credentials or user inactive" {
+			errors.WriteJSONError(w, "invalid credentials or user inactive", http.StatusUnauthorized)
+			return
+		}
+		errors.WriteJSONError(w, "login failed: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	if user.Password != creds.Password {
-		errors.WriteJSONError(w, "invalid credentials", http.StatusUnauthorized)
+	if !user.Status {
+		errors.WriteJSONError(w, "user is inactive", http.StatusForbidden)
 		return
 	}
 

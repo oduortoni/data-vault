@@ -2,7 +2,6 @@ package auth
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"dv/internal/users"
@@ -39,7 +38,6 @@ func (auth *Auth) Register(w http.ResponseWriter, r *http.Request) {
 		Password: creds.Password, // TODO: hash the password
 		Status:   true,
 	}
-	fmt.Println("Registering user:", user.Email)
 	err := auth.UserService.Register(user)
 	if err != nil {
 		errors.WriteJSONError(w, err.Error(), http.StatusInternalServerError)

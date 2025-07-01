@@ -52,3 +52,12 @@ Thumbs.db
 
 # error handling
 errors.log
+
+# database files
+*.db
+# SQLite database files
+*.sqlite
+# PostgreSQL database files
+*.pgsql
+# MySQL database files
+*.mysql

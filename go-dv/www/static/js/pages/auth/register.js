@@ -45,7 +45,7 @@ const RegisterView = () => {
             <form id="register-form">
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" name="username" placeholder="Email" required />
+                    <input type="text" id="username" name="username" placeholder="Username" required />
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>

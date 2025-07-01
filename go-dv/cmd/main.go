@@ -6,6 +6,9 @@ import (
 	"os"
 	"path"
 
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
+
 	"dv/internal/users"
 	"dv/mvc/controllers"
 	"dv/mvc/models"
@@ -25,7 +28,17 @@ func main() {
 	Port = server.Port(Port)
 	fmt.Printf("Server listening on %s:%d\n", Host, Port)
 
-	userModel := models.NewUserModel()
+	// in-memory user model
+	// userModel := models.NewUserModel()
+
+	// gorm user model
+	db, err := gorm.Open(sqlite.Open("database.sqlite"), &gorm.Config{})
+	if err != nil {
+		panic("failed to connect database")
+	}
+	userModel := models.NewGormUserModel(db)
+
+	// create user service
 	userService := users.NewUserService(userModel)
 	auth := auth.NewAuth(userService, []byte("secret"), "access_token")
 
