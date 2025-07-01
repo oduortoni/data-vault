@@ -7,7 +7,7 @@ import (
 
 func (auth *Auth) SetAuthCookies(w http.ResponseWriter, accessToken, refreshToken string) {
 	http.SetCookie(w, &http.Cookie{
-		Name:     "access_token",
+		Name:     auth.TokenName,
 		Value:    accessToken,
 		Path:     "/",
 		HttpOnly: true,

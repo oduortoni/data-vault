@@ -11,13 +11,12 @@
 const Home = () => {
     window.app.innerHTML = `
         <section class="hero">
-            HOME
-            <button id="about">About</button>
+            Home Page
         </section>
     `;
 
     // Attach event listener to button after rendering
-    document.getElementById("about").onclick = () => window.router.navigate("/about");
+    // document.getElementById("about").onclick = () => window.router.navigate("/about");
 };
 
 export default Home;

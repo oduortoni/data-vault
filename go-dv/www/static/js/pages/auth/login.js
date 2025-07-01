@@ -31,7 +31,16 @@ const Login = async () => {
             });
 
             const data = await res.json();
-            output.innerText = JSON.stringify(data, null, 2);
+            // output.innerText = JSON.stringify(data, null, 2);
+            if (res.ok) {
+                output.innerText = "Login successful! Redirecting...";
+                // Redirect to dashboard or home page after successful login
+                setTimeout(() => {
+                    window.router.navigate("/dashboard");
+                }, 1000);
+            } else {
+                output.innerText = `Error: ${data.message || "Login failed"}`;
+            }
         } catch (err) {
             output.innerText = "Failed to connect to server";
             console.error(err);

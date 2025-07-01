@@ -57,7 +57,7 @@ func main() {
 	hSrv.Register("POST", "/auth/login", auth.Login)
 	hSrv.Register("POST", "/auth/logout", auth.Logout)
 	hSrv.Register("POST", "/auth/refresh", auth.Refresh)
-	hSrv.Register("GET", "/dashboard", auth.AuthMiddleware(controllers.Dashboard(hTemplate)))
+	hSrv.Register("GET", "/dashboard", auth.AuthMiddleware(controllers.Dashboard))
 
 	err = hSrv.ListenAndServe()
 	if err != nil {

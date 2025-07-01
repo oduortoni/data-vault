@@ -17,6 +17,7 @@ import {
     Register,
     Login,
     Logout,
+    Dashboard,
 } from "./pages/index.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -28,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
         Dialog,
         Home,
         About,
+        Dashboard,
         Login,
         Register,
         Logout,
@@ -39,6 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
     router.fallback(Home);
     router.register("/", Home);
     router.register("/about", About);
+    router.register("/dashboard", Dashboard);
 
     // Auth routes
     router.register("/login", Login);
@@ -58,6 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("nav-logo").onclick = () => router.navigate("/");
     document.getElementById("nav-home").onclick = () => router.navigate("/");
     document.getElementById("nav-about").onclick = () => router.navigate("/about");
+    document.getElementById("nav-dashboard").onclick = () => router.navigate("/dashboard");
     document.getElementById("nav-login").onclick = () => router.navigate("/login");
     document.getElementById("nav-register").onclick = () => router.navigate("/register");
     document.getElementById("nav-logout").onclick = () => router.navigate("/logout");

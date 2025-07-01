@@ -1,21 +1,28 @@
 package controllers
 
 import (
+	"encoding/json"
 	"net/http"
 
-	"dv/pkg/htemplate"
+	"dv/internal/users"
+	"dv/pkg/auth"
+	"dv/pkg/errors"
 )
 
-func Dashboard(ht *htemplate.HTemplate) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		data := map[string]string{
-			"Title": "Dashboard",
-			"Body":  "Unauthorized",
-		}
+func Dashboard(w http.ResponseWriter, r *http.Request) {
+	user, ok := r.Context().Value(auth.UserKey).(*users.UserDTO)
+	if !ok {
+		errors.WriteJSONError(w, "Internal Server Error: could not retrieve user from context", http.StatusInternalServerError)
+		return
+	}
 
-		err := ht.Execute(w, "index.html", data)
-		if err != nil {
-			// Log or handle error if needed
-		}
+	data := map[string]string {
+		"username": user.Username,
+		"email":    user.Email,
+	}
+
+	if err := json.NewEncoder(w).Encode(data); err != nil {
+		errors.WriteJSONError(w, "Internal Server Error: could not encode user data", http.StatusInternalServerError)
+		return
 	}
 }
