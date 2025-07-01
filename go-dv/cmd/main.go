@@ -6,7 +6,9 @@ import (
 	"os"
 	"path"
 
+	"dv/internal/users"
 	"dv/mvc/controllers"
+	"dv/mvc/models"
 	"dv/pkg/auth"
 	"dv/pkg/htemplate"
 	"dv/pkg/server"
@@ -22,6 +24,10 @@ var (
 func main() {
 	Port = server.Port(Port)
 	fmt.Printf("Server listening on %s:%d\n", Host, Port)
+
+	userModel := models.NewUserModel()
+	userService := users.NewUserService(userModel)
+	auth := auth.NewAuth(userService, []byte("secret"), "access_token")
 
 	// fetch all neded directories
 	cwd, err := os.Getwd()

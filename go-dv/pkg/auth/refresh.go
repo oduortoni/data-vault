@@ -6,20 +6,20 @@ import (
 	"dv/pkg/errors"
 )
 
-func Refresh(w http.ResponseWriter, r *http.Request) {
+func (auth *Auth) Refresh(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("refresh_token")
 	if err != nil {
 		errors.WriteJSONError(w, "missing refresh token", http.StatusUnauthorized)
 		return
 	}
 
-	email, ok := refreshStore[cookie.Value]
+	email, ok := auth.RefreshStore[cookie.Value]
 	if !ok {
 		errors.WriteJSONError(w, "invalid refresh token", http.StatusUnauthorized)
 		return
 	}
 
-	accessToken, err := GenerateJWT(email)
+	accessToken, err := auth.GenerateJWT(email)
 	if err != nil {
 		errors.WriteJSONError(w, "failed to generate new access token", http.StatusInternalServerError)
 		return
@@ -32,9 +32,9 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	delete(refreshStore, cookie.Value)
-	refreshStore[newRefresh] = email
+	delete(auth.RefreshStore, cookie.Value)
+	auth.RefreshStore[newRefresh] = email
 
-	setAuthCookies(w, accessToken, newRefresh)
+	auth.SetAuthCookies(w, accessToken, newRefresh)
 	w.Write([]byte(`{"message":"refreshed successfully"}`))
 }

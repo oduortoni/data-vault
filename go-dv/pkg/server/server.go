@@ -37,7 +37,6 @@ func (s HttpServer) Register(method, pattern string, handler http.HandlerFunc) {
 	s.Router.register(method, pattern, handler)
 }
 
-
 func (s HttpServer) Info(err error, msg string, save bool) {
 	logMsg := fmt.Sprintf("[INFO] %s: %v\n", msg, err)
 	fmt.Print(logMsg)

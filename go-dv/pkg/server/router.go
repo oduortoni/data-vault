@@ -3,6 +3,7 @@ package server
 import (
 	"net/http"
 )
+
 type routeKey struct {
 	Method string
 	Path   string
@@ -21,6 +22,7 @@ func NewRouter() *Router {
 func (r *Router) register(method string, pattern string, handler http.HandlerFunc) {
 	r.routes[routeKey{Method: method, Path: pattern}] = handler
 }
+
 // implement the ServeHTTP so the Router satisfies http.Handler
 func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	for key, handler := range r.routes {
@@ -31,7 +33,6 @@ func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 	http.Redirect(w, req, "/", http.StatusFound)
 }
-
 
 // pathMatch checks for exact or prefix matches
 func pathMatch(pattern, path string) bool {

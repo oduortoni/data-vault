@@ -16,8 +16,9 @@ const Register = async () => {
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
         const payload = {
-            email: form["register-email"].value,
-            password: form["register-password"].value
+            username: form["username"].value,
+            email: form["email"].value,
+            password: form["password"].value
         };
 
         try {
@@ -42,8 +43,18 @@ const RegisterView = () => {
         <section class="auth-form">
             <h2>Register</h2>
             <form id="register-form">
-                <input type="email" id="register-email" placeholder="Email" required />
-                <input type="password" id="register-password" placeholder="Password" required />
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Email" required />
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Email" required />
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Password" required />
+                </div>
                 <button type="submit">Register</button>
             </form>
             <pre id="register-output"></pre>

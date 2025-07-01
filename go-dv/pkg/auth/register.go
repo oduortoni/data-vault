@@ -2,14 +2,14 @@ package auth
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
+	"dv/internal/users"
 	"dv/pkg/errors"
 )
 
-var userStore = map[string]string{}
-
-func Register(w http.ResponseWriter, r *http.Request) {
+func (auth *Auth) Register(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		errors.WriteJSONError(w, "method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -28,15 +28,25 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check if user already exists
-	if _, exists := userStore[creds.Email]; exists {
+	if _, exists := (*auth.UserService).Exists(creds.Email); exists {
 		errors.WriteJSONError(w, "email already registered", http.StatusConflict)
 		return
 	}
 
-	// Save user (you can hash password here)
-	userStore[creds.Email] = creds.Password
+	user := users.UserDTO{
+		Username: creds.Username,
+		Email:    creds.Email,
+		Password: creds.Password, // TODO: hash the password
+		Status:   true,
+	}
+	fmt.Println("Registering user:", user.Email)
+	err := auth.UserService.Register(user)
+	if err != nil {
+		errors.WriteJSONError(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-	accessToken, err := GenerateJWT(creds.Email)
+	accessToken, err := auth.GenerateJWT(creds.Email)
 	if err != nil {
 		errors.WriteJSONError(w, "token generation failed", http.StatusInternalServerError)
 		return
@@ -48,8 +58,8 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	refreshStore[refreshToken] = creds.Email
-	setAuthCookies(w, accessToken, refreshToken)
+	auth.RefreshStore[refreshToken] = creds.Email
+	auth.SetAuthCookies(w, accessToken, refreshToken)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)

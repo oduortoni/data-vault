@@ -7,18 +7,18 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GenerateJWT(email string) (string, error) {
+func (auth *Auth) GenerateJWT(email string) (string, error) {
 	claims := jwt.MapClaims{
 		"email": email,
 		"exp":   time.Now().Add(time.Hour * 24).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(jwtSecret)
+	return token.SignedString(auth.JWTSecret)
 }
 
-func ParseJWT(tokenStr string) (string, error) {
+func (auth *Auth) ParseJWT(tokenStr string) (string, error) {
 	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
-		return jwtSecret, nil
+		return auth.JWTSecret, nil
 	})
 	if err != nil || !token.Valid {
 		return "", errors.New("invalid token")

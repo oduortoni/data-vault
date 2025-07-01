@@ -11,15 +11,15 @@ type contextKey string
 const UserKey = contextKey("user_email")
 
 // AuthMiddleware protects routes by validating the JWT in the cookie
-func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
+func (auth *Auth) AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		cookie, err := r.Cookie(tokenName)
+		cookie, err := r.Cookie(auth.TokenName)
 		if err != nil {
 			errors.WriteJSONError(w, "unauthorized: missing auth token", http.StatusUnauthorized)
 			return
 		}
 
-		email, err := ParseJWT(cookie.Value)
+		email, err := auth.ParseJWT(cookie.Value)
 		if err != nil {
 			errors.WriteJSONError(w, "unauthorized: invalid or expired token", http.StatusUnauthorized)
 			return
