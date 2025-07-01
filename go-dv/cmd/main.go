@@ -9,6 +9,7 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 
+	"dv/pkg/config"
 	"dv/internal/users"
 	"dv/mvc/controllers"
 	"dv/mvc/models"
@@ -17,30 +18,25 @@ import (
 	"dv/pkg/server"
 )
 
-var (
-	Port      int    = 9000
-	Host      string = "0.0.0.0"
-	hTemplate *htemplate.HTemplate
-	hSrv      *server.HttpServer
-)
-
 func main() {
-	Port = server.Port(Port)
-	fmt.Printf("Server listening on %s:%d\n", Host, Port)
+	// Load application configuration
+	cfg := config.New()
+	fmt.Printf("Server listening on %s:%d\n", cfg.Server.Host, cfg.Server.Port)
 
 	// in-memory user model
-	// userModel := models.NewUserModel()
+	// userRepository := models.NewInternalUserRepository()
 
 	// gorm user model
-	db, err := gorm.Open(sqlite.Open("database.sqlite"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open(cfg.Database.DSN), &gorm.Config{})
 	if err != nil {
-		panic("failed to connect database")
+		// Use log.Fatalf for cleaner exit on startup errors
+		log.Fatalf("failed to connect database: %v", err)
 	}
-	userModel := models.NewGormUserModel(db)
+	userRepository := models.NewGormUserRepository(db)
 
 	// create user service
-	userService := users.NewUserService(userModel)
-	auth := auth.NewAuth(userService, []byte("secret"), "access_token")
+	userService := users.NewUserService(userRepository)
+	auth := auth.NewAuth(userService, []byte(cfg.Auth.JWTSecret), cfg.Auth.TokenCookieName)
 
 	// fetch all neded directories
 	cwd, err := os.Getwd()
@@ -52,7 +48,7 @@ func main() {
 		log.Fatalf("Unable to parse template files\n%s\n", err.Error())
 	}
 
-	hSrv = server.Start(Host, Port, "errors.log")
+	hSrv := server.Start(cfg.Server.Host, cfg.Server.Port, "errors.log")
 
 	// register routes
 	hSrv.Register("GET", "/", controllers.Index(hTemplate))

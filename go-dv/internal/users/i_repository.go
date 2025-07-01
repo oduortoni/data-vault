@@ -1,6 +1,6 @@
 package users
 
-type UserInterface interface {
+type IUserRepository interface {
 	Create(user UserDTO) error
 	Read(id int) (*UserDTO, error)
 	Update(user UserDTO) error

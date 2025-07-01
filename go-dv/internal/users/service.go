@@ -6,11 +6,11 @@ import (
 
 // UserService handles user-related operations
 type UserService struct {
-	IUser UserInterface
+	IUser IUserRepository
 }
 
 // NewUserService creates a new UserService instance
-func NewUserService(i_user UserInterface) *UserService {
+func NewUserService(i_user IUserRepository) *UserService {
 	return &UserService{
 		IUser: i_user,
 	}
