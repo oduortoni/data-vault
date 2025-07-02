@@ -9,7 +9,9 @@
  * contact: oduortoni@gmail.com
  */
 
-import { Router } from "./lib/index.js";
+import { 
+    Router,
+} from "./lib/index.js";
 import { Dialog } from "./components/index.js";
 import {
     Home,

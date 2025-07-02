@@ -32,7 +32,7 @@ const About = () => {
 
             <p>
                 <ol>
-                    <li>Requirements Analysis: <button id="requirements">Requirements</button></li>
+                    <li>Requirements Analysis: <button class="btn btn-primary" id="requirements">Requirements</button></li>
                 </ol>
             </p>
         </section>

@@ -11,4 +11,6 @@
 
 import Router from "./router.js";
 
-export { Router };
+export { 
+    Router,
+};

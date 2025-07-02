@@ -18,8 +18,8 @@ const Login = async () => {
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
         const payload = {
-            email: form["login-email"].value,
-            password: form["login-password"].value,
+            email: form["email"].value,
+            password: form["password"].value,
         };
 
         try {
@@ -31,10 +31,9 @@ const Login = async () => {
             });
 
             const data = await res.json();
-            // output.innerText = JSON.stringify(data, null, 2);
             if (res.ok) {
                 output.innerText = "Login successful! Redirecting...";
-                // Redirect to dashboard or home page after successful login
+                // Redirect to dashboard after successful login
                 setTimeout(() => {
                     window.router.navigate("/dashboard");
                 }, 1000);
@@ -50,15 +49,26 @@ const Login = async () => {
 
 const LoginView = () => {
     return `
-        <section class="auth-form">
-            <h2>Login</h2>
-            <form id="login-form">
-                <input type="email" id="login-email" placeholder="Email" required />
-                <input type="password" id="login-password" placeholder="Password" required />
-                <button type="submit">Login</button>
-            </form>
-            <pre id="login-output"></pre>
-        </section>
+        <div class="auth-container">
+            <div class="form-card">
+                <h1>Login</h1>
+                <div id="login-output" class="login-output"></div>
+                <form id="login-form" novalidate>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+                <div class="form-footer">
+                    <p>Don't have an account? <a href="/register" id="link-to-register" data-link>Sign Up</a></p>
+                </div>
+            </div>
+        </div>
     `;
 };
 
