@@ -18,6 +18,7 @@ import {
     Login,
     Logout,
     Dashboard,
+    Requirements
 } from "./pages/index.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -29,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
         Dialog,
         Home,
         About,
+        Requirements,
         Dashboard,
         Login,
         Register,
@@ -41,6 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
     router.fallback(Home);
     router.register("/", Home);
     router.register("/about", About);
+    router.register("/requirements", Requirements);
+    
     router.register("/dashboard", Dashboard);
 
     // Auth routes

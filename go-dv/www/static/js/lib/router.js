@@ -20,6 +20,7 @@ class Router {
     }
 
     route(path) {
+        console.log(`Routing to: ${path}`);
         const segments = path.split("/").filter(Boolean);
 
         const route = this.#routes.find((route) => {
@@ -30,17 +31,27 @@ class Router {
                 return false;
             }
 
-            return routeSegments.every((segment, index) => {
-                if (segment.startsWith(":")) {
-                    // This is a parameter segment, it matches any value e.g :id within posts/post/:id
-                    return segments[index] !== undefined;
+            // Use a standard for-loop for clearer, more explicit matching logic.
+            for (let i = 0; i < routeSegments.length; i++) {
+                const routeSegment = routeSegments[i];
+                const pathSegment = segments[i];
+
+                // If the route segment is a parameter (e.g., ":id"), it's a match.
+                if (routeSegment.startsWith(":")) {
+                    continue;
                 }
-                // This is a literal segment, must match exactly e.g post within posts/post/123
-                return segment === segments[index];
-            });
+
+                // If the literal segments do not match, this is not the correct route.
+                if (routeSegment !== pathSegment) {
+                    return false;
+                }
+            }
+
+            return true; // All segments matched.
         });
 
         if (route) {
+            console.log(`Matched route: ${route.path}`);
             // Extract parameters if any
             const params = {};
             const routeSegments = route.path.split("/").filter(Boolean);
@@ -55,6 +66,7 @@ class Router {
             // Pass both app and params to the view
             route.view(params);
         } else {
+            console.log("No route matched");
             this.#default();
         }
     }

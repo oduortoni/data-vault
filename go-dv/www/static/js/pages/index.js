@@ -15,5 +15,6 @@ import Dashboard from "./dashboard/dashboard.js";
 import Register from "./auth/register.js";
 import Login from "./auth/login.js";
 import Logout from "./auth/logout.js";
+import Requirements from "./docs/requirements.js";
 
-export { Home, About, Dashboard, Register, Login, Logout };
+export { Home, About, Dashboard, Register, Login, Logout, Requirements };
