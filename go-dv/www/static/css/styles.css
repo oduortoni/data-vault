@@ -1,149 +1,282 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/*
+ * file: go-dv/www/static/css/styles.css
+ * description: Main stylesheet for the Data Vault application.
+ * author: toni
+ * date: 2025-07-02
+ * version: 1.1.0
+ */
 
+/* --- 1. Design System & Variables --- */
 :root {
-    --border-color: 1px solid #ccc;
-    --text-color: #333;
-    --background-color: #f0f0f0;
-    --primary-color: #007bff;
-    --secondary-color: #6c757d;
-    --success-color: #28a745;
-    --danger-color: #dc3545;
-    --warning-color: #ffc107;
-    --info-color: #17a2b8;
-    --light-color: #f8f9fa;
-    --dark-color: #343a40;
-    --font-family: 'Arial', sans-serif;
-    --font-size: 16px;
-    --line-height: 1.5;
-    --transition: all 0.3s ease;
-    --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    --border-radius: 5px;
-    --padding: 10px;
-    --margin: 10px;
-    --max-width: 1200px;
-    --min-width: 320px;
-    --text-decoration: none;
-    --text-transform: none;
-    --text-align: left;
-    --color: #000;
-    --hover-color: #0056b3;
-    --visited-color: #6c757d;
-    --active-color: #0056b3;
-    --focus-color: #0056b3;
-    --link-color: #007bff;
-    --link-hover-color: #0056b3;
-    --link-visited-color: #6c757d;
-    --link-active-color: #0056b3;
-    --link-focus-color: #0056b3;
-    --link-decoration: none;
-    --link-decoration-hover: underline;
-    --link-decoration-visited: none;
+    /* Colors (Monochromatic) */
+    --color-background: #0a0a0a; /* Very dark gray, almost black */
+    --color-surface: #1a1a1a;   /* Dark gray for cards, headers */
+    --color-text-primary: #f0f0f0; /* Off-white for primary text */
+    --color-text-secondary: #a0a0a0; /* Gray for subtitles, secondary info */
+    --color-border: #333333;    /* Subtle borders */
+    --color-primary: #ffffff;   /* White for primary actions/buttons */
+    --color-primary-text: #0a0a0a; /* Black text on primary buttons */
+    --color-secondary-text: #f0f0f0; /* White text for secondary buttons */
+    --color-secondary-border: #555555; /* Gray border for secondary buttons */
+    --color-hover-bg: #2a2a2a; /* Background for hover states */
+
+    /* Typography */
+    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: 'Roboto Mono', monospace;
+    --font-size-base: 16px;
+
+    /* Spacing & Layout */
+    --spacing-unit: 8px;
+    --header-height: 70px;
+    --content-width: 1100px;
+    --border-radius: 6px;
+    --transition-speed: 0.2s;
 }
 
-html, body {
-    font-family: Tahoma;
-}
-body {
-    max-width: 800px;
-    margin: auto;
-    padding: 2rem;
-    line-height: 1.6;
-}
-h1, h2, h3 {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 0.25rem;
-}
-.nav-bar { 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #f8f9fa;
-    padding: 10px 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-.nav-bar nav-logo {
-    font-size: x-large;
-    font-weight: bold;
-    color: var(--primary-color);
-}
-.nav-bar ul {
-    list-style: none;
-    padding: 0;
+/* --- 2. Global Resets & Base Styles --- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
     margin: 0;
+    padding: 0;
 }
-.nav-bar ul > li {
-    display: inline-block;
-    margin-right: 20px;
+
+html {
+    font-size: var(--font-size-base);
+    scroll-behavior: smooth;
 }
-.nav-bar li:last-child {
-    margin-right: 0;
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: var(--font-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
-.nav-link {
-    color: var(--text-color, #007bff);
+
+/* --- 3. Typography & Content Elements --- */
+a {
+    color: var(--color-primary);
     text-decoration: none;
-    cursor: pointer;
-    margin-right: 10px;
-    font-size: 16px;
-    font-weight: 500;
-    transition: color 0.3s ease, text-decoration 0.3s ease;
-    padding: 5px 10px;
-    border-radius: 5px;
-    display: inline-block;
-    line-height: 1.5;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    text-decoration: none;
-    overflow: hidden;
-    max-width: 200px; /* Adjust as needed */
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, color 0.3s ease;
-    border: var(--border-color);
+    transition: opacity var(--transition-speed) ease-in-out;
 }
-.nav-link:hover {
-    color: #000;
-    text-decoration: underline;
+
+a:hover {
+    opacity: 0.8;
 }
-.nav-link:visited {
-    color: #000;
-    text-decoration: none;
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--color-text-primary);
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: calc(var(--spacing-unit) * 2);
 }
-.nav-link:active {
-    color: #000;
-    text-decoration: none;
+
+h1 { font-size: 2.5rem; font-weight: 700; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+
+p {
+    color: var(--color-text-secondary);
+    margin-bottom: calc(var(--spacing-unit) * 2);
 }
-.nav-link:focus {
-    color: #000;
-    text-decoration: none;
-}
-.nav-link:focus:hover {
-    color: #000;
-    text-decoration: underline;
-}
+
 table {
     width: 100%;
     border-collapse: collapse;
-    margin: 1rem 0;
-  }
-  th, td {
-    border: 1px solid var(--border-color);
-    padding: 0.5rem;
-  }
-  th {
-    background-color: var(--light-color);
-    color: var(--dark-color);
-  }
-  tr:nth-child(even) {
-    background-color: var(--light-color);
+    margin: calc(var(--spacing-unit) * 3) 0;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    overflow: hidden; /* To make border-radius work on table corners */
+}
+
+th, td {
+    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
     text-align: left;
-  }
-  code {
-    background-color: var(--light-color);
-    color: var(--dark-color);
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-  }
+    border-bottom: 1px solid var(--color-border);
+}
+
+th {
+    background-color: rgba(255, 255, 255, 0.05); /* A very subtle highlight */
+    color: var(--color-text-primary);
+    font-weight: 600;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover {
+    background-color: var(--color-hover-bg);
+}
+
+pre, code {
+    font-family: var(--font-mono);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-unit);
+    color: var(--color-text-secondary);
+}
+
+pre {
+    padding: calc(var(--spacing-unit) * 2);
+    overflow-x: auto;
+    white-space: pre-wrap; /* Wrap long lines */
+}
+
+ul, ol {
+    padding-left: calc(var(--spacing-unit) * 3);
+    margin-bottom: calc(var(--spacing-unit) * 2);
+    color: var(--color-text-secondary);
+}
+
+li {
+    margin-bottom: var(--spacing-unit);
+}
+
+/* --- 4. Layout --- */
+.site-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.site-content {
+    flex: 1; /* Allows this area to grow and push the footer down. */
+    width: 100%;
+    max-width: var(--content-width);
+    margin: 0 auto;
+    /* Padding to account for the fixed header and add space on the sides. */
+    padding: calc(var(--header-height) + var(--spacing-unit) * 4) calc(var(--spacing-unit) * 3);
+}
+
+/* The footer at the bottom of the page. */
+.site-footer {
+    width: 100%;
+    padding: calc(var(--spacing-unit) * 3) 0;
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    border-top: 1px solid var(--color-border);
+    background-color: var(--color-background);
+}
+
+/* --- 5. Header & Navigation --- */
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--header-height);
+    background-color: rgba(10, 10, 10, 0.85); /* Semi-transparent background */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--color-border);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: var(--content-width);
+    padding: 0 calc(var(--spacing-unit) * 3);
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    text-decoration: none;
+    transition: color var(--transition-speed) ease;
+    flex-shrink: 0; /* Prevents logo from shrinking on small screens */
+}
+
+.logo:hover {
+    color: var(--color-primary);
+    opacity: 1; /* Override global link hover */
+}
+
+.site-nav {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 1);
+}
+
+/* --- 6. Buttons --- */
+.btn {
+    display: inline-block;
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    font-size: 0.9rem;
+    font-family: var(--font-primary);
+    text-align: center;
+    cursor: pointer;
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+    border: 1px solid transparent;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-text-secondary);
+    border-color: transparent;
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-hover-bg);
+    color: var(--color-text-primary);
+}
+
+/* --- 7. Mobile Navigation & Responsiveness --- */
+.nav-toggle {
+    display: none; /* Hidden on desktop */
+    cursor: pointer;
+    z-index: 1001;
+    padding: var(--spacing-unit);
+    margin: calc(var(--spacing-unit) * -1); /* Negative margin to increase clickable area */
+}
+
+.nav-toggle .bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    background-color: var(--color-text-primary);
+    transition: all 0.3s ease-in-out;
+}
+
+@media (max-width: 820px) {
+    .site-nav {
+        display: none; /* Hide nav links on mobile */
+    }
+
+    .nav-toggle {
+        display: block; /* Show hamburger icon */
+    }
+
+    .site-nav.active {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-unit);
+        position: absolute;
+        top: var(--header-height);
+        left: 0;
+        width: 100%;
+        background-color: var(--color-background);
+        padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
+        border-bottom: 1px solid var(--color-border);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+}

@@ -62,13 +62,30 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // Navbar links
-    document.getElementById("nav-logo").onclick = () => router.navigate("/");
+    document.getElementById("logo").onclick = () => router.navigate("/");
     document.getElementById("nav-home").onclick = () => router.navigate("/");
     document.getElementById("nav-about").onclick = () => router.navigate("/about");
     document.getElementById("nav-dashboard").onclick = () => router.navigate("/dashboard");
     document.getElementById("nav-login").onclick = () => router.navigate("/login");
     document.getElementById("nav-register").onclick = () => router.navigate("/register");
     document.getElementById("nav-logout").onclick = () => router.navigate("/logout");
+
+    // Mobile navigation toggle
+    const navToggle = document.getElementById("nav-toggle");
+    const siteNav = document.querySelector(".site-nav");
+
+    if (navToggle && siteNav) {
+        navToggle.addEventListener("click", () => {
+            siteNav.classList.toggle("active");
+        });
+
+        // Close mobile menu when a navigation link is clicked
+        siteNav.addEventListener("click", (e) => {
+            if (e.target.tagName === 'A' && siteNav.classList.contains('active')) {
+                siteNav.classList.remove('active');
+            }
+        });
+    }
 
     // Initial route on page load
     router.navigate(location.pathname);
